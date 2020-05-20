@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using dto;
 using Events;
 using Network;
@@ -14,10 +15,24 @@ namespace NetworkPlayer
 
         public PlayerAttribute PlayerAttribute => playerAttribute;
 
-        public PlayerManager playerManager;
+        private PlayerIdentifier playerIdentifier;
+        
+        public NetworkPacketManager networkPacketManager;
+        
         
         public void Start()
         {
+            playerIdentifier = GetComponent<Player>().GetPlayerIdentifier();
+            InvokeRepeating(nameof(SendPlayerUpdates), 2f,0.5f);
+        }
+
+
+        private void SendPlayerUpdates()
+        {
+            List<GameEvent> events = CollectAttributes(playerIdentifier);
+            events.ForEach(e => networkPacketManager.Send(e));
+            
+            playerAttribute = new PlayerAttribute();
             
         }
 
@@ -30,21 +45,8 @@ namespace NetworkPlayer
         {
             playerAttribute.AddFiring();
         }
-        
-        public List<GameEvent> GetAttributeFrame()
-        {
-            PlayerIdentifier playerIdentifier = playerManager.GetLocalPlayerIdentifier();
-            var gameEvents = AddAttributes(playerIdentifier);
-            playerAttribute = new PlayerAttribute();
-            return gameEvents;
-        }
 
-        public PlayerIdentifier GetPlayerIdentifier()
-        {
-            return playerManager.GetLocalPlayerIdentifier();
-        }
-
-        private List<GameEvent> AddAttributes(PlayerIdentifier playerIdentifier)
+        private List<GameEvent> CollectAttributes(PlayerIdentifier playerIdentifier)
         {
             List<GameEvent> actions = new List<GameEvent>();
 

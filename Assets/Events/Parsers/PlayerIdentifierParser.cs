@@ -15,8 +15,8 @@ namespace Events.Parsers
 
         public byte[] Serialize()
         {
-            var destination = new byte[4];
-            Util.CopyBytes(destination, BitConverter.GetBytes(playerIdentifier.Id));
+            var destination = new byte[5];
+            Util.CopyBytes(destination, new byte[]{0},BitConverter.GetBytes(playerIdentifier.Id));
             return destination;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using dto;
 using Events.Parsers;
+using UnityEngine;
 
 namespace Network
 {
@@ -22,23 +23,14 @@ namespace Network
         {
             networkClient.Connect();
             networkServer.StartReceive();
-
-            
         }
-
-        public void InitiateClient(PlayerIdentifier playerIdentifier)
-        {
-            var playerIdentifierParser = new PlayerIdentifierParser(playerIdentifier);
-            var welcomePacket = new WelcomePacket(playerIdentifierParser.Serialize());
-            networkClient.Send(welcomePacket);
-        }
-
+        
         public void Send(Packet packet)
         {
             networkClient.Send(packet);
         }
 
-        public void onReceive(GamePacket packet)
+        public void onReceive(Packet packet)
         {
         
         }

@@ -8,30 +8,30 @@ using UnityEngine;
 public class NetworkPacketManager : MonoBehaviour
 {
 
-    
-    public FramedPlayerAttribute framedPlayerAttribute;
-    
     private Network.Network network;        
     
     public void Start()
     {
         network = new Network.Network();
         network.Start();
-        network.InitiateClient(framedPlayerAttribute.GetPlayerIdentifier());
         
+        //network.InitiateClient(framedPlayerAttribute.GetPlayerIdentifier());
         
-        InvokeRepeating("Send", 1f, 0.5f);
+        //The error is because we are not including the type of the action in the game action serializations.
+        //Also, WelcomePacket should be a GameEvent -> Serialize -> Packet instead.
+        //Also, should network manager really have a reference to framedPlayerAttribute? Feels like network manager
+        //is more general and should instead by used by framedPlayerAttribute. Thanks
+        
     }
+    
 
-
-    private void Send()
+    public void Send(GameEvent gameEvent)
     {
-            
-        List<GameEvent> gameEvents = framedPlayerAttribute.GetAttributeFrame();
-        Debug.Log("Sending " + gameEvents.Count + " game events to server");
-        gameEvents.Select(ge => new GamePacket(ge.Serialize()))
-            .ToList().ForEach(packet => network.Send(packet));
+        var gamePacket = new Packet(gameEvent.Serialize());
+        network.Send(gamePacket);
     }
+    
+    //This class is quite simple at the moment. But we will use this class to direct packets to the correct player/AI handler. 
 
 
 }

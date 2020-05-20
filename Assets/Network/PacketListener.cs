@@ -2,6 +2,6 @@
     {
         public interface PacketListener
         {
-            void onReceive(GamePacket packet);
+            void onReceive(Packet packet);
         }
     }

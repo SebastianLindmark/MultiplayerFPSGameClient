@@ -19,6 +19,7 @@ namespace Events
         {
             byte[][] arr =
             {
+                new byte[]{10},
                 BitConverter.GetBytes(playerIdentifier.Id),
                 BitConverter.GetBytes(position.X),
                 BitConverter.GetBytes(position.Y),
@@ -26,7 +27,7 @@ namespace Events
                 BitConverter.GetBytes(position.XRotation),
             };
 
-            byte[] destination = new byte[arr.Length * 4];
+            byte[] destination = new byte[21];
             Util.CopyBytes(destination, arr);
             return destination;
         }

@@ -56,15 +56,15 @@ namespace Network
 
         private void NotifyPacket(int packetSize, int payloadOffset, byte[] payload)
         {
-            GamePacket packet = ConstructPacket(packetSize, payloadOffset, payload);
+            Packet packet = ConstructPacket(packetSize, payloadOffset, payload);
             packetListener.onReceive(packet);
         }
 
-        private GamePacket ConstructPacket(int packetSize, int payloadOffset, byte[] payload)
+        private Packet ConstructPacket(int packetSize, int payloadOffset, byte[] payload)
         {
             byte[] packetPayload = new byte[packetSize];
             Array.Copy(payload, payloadOffset, packetPayload, 0, packetSize);
-            return new GamePacket(packetSize, packetPayload);
+            return new Packet(packetSize, packetPayload);
         }
 
 
