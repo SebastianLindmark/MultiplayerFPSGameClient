@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using dto;
 using Events;
+using Events.Parsers;
 using Network;
 using NetworkPlayer;
 using UnityEngine;
+using EventHandler = Events.Handlers.EventHandler;
 
-public class NetworkPacketManager : MonoBehaviour
+public class NetworkPacketManager : MonoBehaviour, PacketListener
 {
 
-    private Network.Network network;        
+    private Network.Network network;
+
+    public PlayerManager playerManager;
     
     public void Start()
     {
-        network = new Network.Network();
+        network = new Network.Network(this);
         network.Start();
         
         //network.InitiateClient(framedPlayerAttribute.GetPlayerIdentifier());
@@ -31,7 +37,33 @@ public class NetworkPacketManager : MonoBehaviour
         network.Send(gamePacket);
     }
     
+    
+    
+    
     //This class is quite simple at the moment. But we will use this class to direct packets to the correct player/AI handler. 
 
 
+    public void onReceive(Packet packet)
+    {
+        Debug.Log("Received packet");
+        EventHandler eventHandler =  ParserFactory.Parse(packet);
+        
+        //Maybe have an "entityManager" instead where all object has a method called handlePacket().
+        //We will need to pass packets to other than players.
+        
+        
+        
+        if (playerManager.Exists(eventHandler.GetPlayerIdentifier()))
+        {
+            Player player = playerManager.GetPlayer(new PlayerIdentifier(666));
+            player.OnAction(eventHandler);    
+        }
+        else
+        {
+            Debug.Log("Player " + eventHandler.GetPlayerIdentifier().Id + " does not exist" );
+        }
+
+
+
+    }
 }

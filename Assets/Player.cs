@@ -1,7 +1,9 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using dto;
 using Events;
+using Events.Handlers;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,10 +12,23 @@ public class Player : MonoBehaviour
 
     public NetworkPacketManager networkPacketManager;
 
-    private PlayerIdentifier playerIdentifier = new PlayerIdentifier(1337);
+    public int playerId;
+
+    private PlayerIdentifier playerIdentifier;
+
+    private ConcurrentQueue<EventHandler> eventHandlerQueue = new ConcurrentQueue<EventHandler>();
 
     void Start()
     {
+        playerIdentifier = new PlayerIdentifier(playerId);
+
+        GameObject gameObj = GameObject.FindWithTag("EntityManager");
+
+        if (gameObj != null)
+        {
+            gameObj.GetComponent<PlayerManager>().Add(playerIdentifier, this);
+        }
+
         Invoke(nameof(SendJoinEvent), 1f);
     }
 
@@ -25,13 +40,21 @@ public class Player : MonoBehaviour
         networkPacketManager.Send(joinEvent);
     }
 
+    public void OnAction(EventHandler eventHandler)
+    {
+        eventHandlerQueue.Enqueue(eventHandler);
+    }
+
     public PlayerIdentifier GetPlayerIdentifier()
     {
         return playerIdentifier;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
+        if (eventHandlerQueue.TryDequeue(out var eventHandler))
+        {
+            eventHandler.Execute(this);
+        }
     }
 }

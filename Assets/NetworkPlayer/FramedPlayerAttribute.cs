@@ -15,21 +15,21 @@ namespace NetworkPlayer
 
         public PlayerAttribute PlayerAttribute => playerAttribute;
 
-        private PlayerIdentifier playerIdentifier;
+        private Player player;
         
         public NetworkPacketManager networkPacketManager;
         
         
         public void Start()
         {
-            playerIdentifier = GetComponent<Player>().GetPlayerIdentifier();
-            InvokeRepeating(nameof(SendPlayerUpdates), 2f,0.5f);
+            player = GetComponent<Player>();
+            InvokeRepeating(nameof(SendPlayerUpdates), 2f,0.1f);
         }
 
 
         private void SendPlayerUpdates()
         {
-            List<GameEvent> events = CollectAttributes(playerIdentifier);
+            List<GameEvent> events = CollectAttributes(player.GetPlayerIdentifier());
             events.ForEach(e => networkPacketManager.Send(e));
             
             playerAttribute = new PlayerAttribute();
