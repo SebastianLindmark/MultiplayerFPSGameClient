@@ -12,12 +12,12 @@ namespace NetworkPlayer
         private Vector3 storedPosition;
         private Quaternion storedRotation;
 
-        private FramedPlayerAttribute playerAttribute;
+        private PlayerNetworkController _playerNetworkController;
         
         public void Start()
         {
-            playerAttribute = player.GetComponent<FramedPlayerAttribute>();
-            InvokeRepeating("CheckPosition", 1f, 0.5f);
+            _playerNetworkController = player.GetComponent<PlayerNetworkController>();
+            InvokeRepeating(nameof(CheckPosition), 1f, 0.05f);
             
         }
 
@@ -26,14 +26,13 @@ namespace NetworkPlayer
             
             Vector3 currentPosition = player.transform.position;
             Quaternion currentRotation = player.transform.rotation;
-
             if (!PositionChanged(currentPosition, currentRotation)) return;
 
             storedPosition = currentPosition;
             storedRotation = currentRotation;
             
             Position position = new Position(currentPosition, currentRotation);
-            playerAttribute.AddPosition(position);
+            _playerNetworkController.AddPosition(position);
         }
 
         private bool PositionChanged(Vector3 currentPosition, Quaternion currentRotation)

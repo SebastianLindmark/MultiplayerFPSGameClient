@@ -6,16 +6,14 @@ using Events;
 using Events.Handlers;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, NetworkEntity
 {
-    // Start is called before the first frame update
-
-    public NetworkPacketManager networkPacketManager;
-
+    
     public int playerId;
 
     private PlayerIdentifier playerIdentifier;
-
+    
+    
     private ConcurrentQueue<EventHandler> eventHandlerQueue = new ConcurrentQueue<EventHandler>();
 
     void Start()
@@ -26,19 +24,12 @@ public class Player : MonoBehaviour
 
         if (gameObj != null)
         {
-            gameObj.GetComponent<PlayerManager>().Add(playerIdentifier, this);
+            PlayerManager playerManager = gameObj.GetComponent<PlayerManager>();
+            playerManager.Add(playerIdentifier, this);
         }
-
-        Invoke(nameof(SendJoinEvent), 1f);
+        
     }
 
-
-    private void SendJoinEvent()
-    {
-        Debug.Log("Sending join event for player " + playerIdentifier.Id);
-        var joinEvent = new JoinEvent(playerIdentifier);
-        networkPacketManager.Send(joinEvent);
-    }
 
     public void OnAction(EventHandler eventHandler)
     {
@@ -54,7 +45,18 @@ public class Player : MonoBehaviour
     {
         if (eventHandlerQueue.TryDequeue(out var eventHandler))
         {
+            Debug.Log("Parsing message");
             eventHandler.Execute(this);
         }
+    }
+
+    public PlayerIdentifier getId()
+    {
+        return playerIdentifier;
+    }
+
+    public void onEventReceive(EventHandler eventHandler)
+    {
+        throw new System.NotImplementedException();
     }
 }

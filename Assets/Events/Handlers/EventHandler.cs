@@ -5,7 +5,7 @@ namespace Events.Handlers
 {
     public interface EventHandler
     {
-        void Execute(MonoBehaviour monoBehaviour);
+        void Execute(Player player);
 
         PlayerIdentifier GetPlayerIdentifier();
     }

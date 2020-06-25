@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using dto;
+using Events;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
     private Dictionary<int, Player> playerMap = new Dictionary<int, Player>();
     
+    public NetworkPacketManager networkPacketManager;
+    
     public void Add(PlayerIdentifier playerIdentifier, Player player)
     {
         if (!Exists(playerIdentifier))
         {
-            playerMap[playerIdentifier.Id] = player;   
+            playerMap[playerIdentifier.Id] = player;
+            var joinEvent = new JoinEvent(playerIdentifier);
+            networkPacketManager.Send(joinEvent);
         }
 
     }

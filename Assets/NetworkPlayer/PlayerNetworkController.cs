@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace NetworkPlayer
 {
-    public class FramedPlayerAttribute : MonoBehaviour
+    public class PlayerNetworkController : MonoBehaviour
     {
 
         private PlayerAttribute playerAttribute = new PlayerAttribute();
@@ -23,7 +23,7 @@ namespace NetworkPlayer
         public void Start()
         {
             player = GetComponent<Player>();
-            InvokeRepeating(nameof(SendPlayerUpdates), 2f,0.1f);
+            InvokeRepeating(nameof(SendPlayerUpdates), 2f,0.05f);
         }
 
 
@@ -31,7 +31,6 @@ namespace NetworkPlayer
         {
             List<GameEvent> events = CollectAttributes(player.GetPlayerIdentifier());
             events.ForEach(e => networkPacketManager.Send(e));
-            
             playerAttribute = new PlayerAttribute();
             
         }

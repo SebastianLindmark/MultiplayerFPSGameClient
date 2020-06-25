@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using UnityEngine;
 
 namespace Network
 {
@@ -35,10 +36,27 @@ namespace Network
             while (listening)
             {
                 IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any, port);
-                byte[] received = udpClient.Receive(ref remoteIpEndPoint);
-                SplitPackets(received);
+                try
+                {
+                    byte[] received = udpClient.Receive(ref remoteIpEndPoint);
+                    SplitPackets(received);
+                }
+                catch (SocketException e)
+                {
+                    if (e.ErrorCode == 10054)
+                    {
+                        Debug.Log("Remote port closed, retrying...");
+                        Thread.Sleep(1000);
+
+                    }
+                    else
+                    {
+                        Debug.LogError(e);
+                    }
+                }
             }
         }
+        
 
         private void SplitPackets(byte[] payload)
         {

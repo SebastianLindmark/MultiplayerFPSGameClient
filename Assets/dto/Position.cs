@@ -24,5 +24,10 @@ namespace dto
             Z = position.z;
             XRotation = rotation.x;
         }
+
+        public Vector3 GetPostion()
+        {
+            return new Vector3(X,Y,Z);
+        }
     }
 }

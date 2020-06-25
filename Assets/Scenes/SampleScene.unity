@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bc14088f6d3e344997ecf3b9ea66b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkPacketManager: {fileID: 1758082314}
 --- !u!4 &245226833
 Transform:
   m_ObjectHideFlags: 0
@@ -731,7 +732,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da06fc15faf63a94180f1e6ea8817e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkPacketManager: {fileID: 1758082314}
   playerId: 1337
 --- !u!1 &2065878939
 GameObject:
@@ -871,7 +871,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da06fc15faf63a94180f1e6ea8817e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkPacketManager: {fileID: 1758082314}
   playerId: 666
 --- !u!4 &2089535720
 Transform:

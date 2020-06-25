@@ -1,4 +1,6 @@
-﻿    using System.Net.Sockets;
+﻿    using System;
+    using System.Net.Sockets;
+    using UnityEngine;
 
     namespace Network
     {
@@ -17,9 +19,19 @@
                 this.port = port;
             }
 
-            public void Connect()
+            public bool Connect()
             {
-                udpClient.Connect(ip, port);
+                try
+                {
+                    udpClient.Connect(ip, port);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return false;
+                }
+
             }
 
             public void Send(Packet packet)

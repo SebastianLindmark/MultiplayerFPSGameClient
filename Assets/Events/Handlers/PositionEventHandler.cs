@@ -22,11 +22,12 @@ namespace Events.Handlers
         }
 
 
-        public void Execute(MonoBehaviour monoBehaviour)
+        public void Execute(Player player)
         {
+            
             var pe = positionEvent.Position;
             Vector3 position = new Vector3(pe.X,pe.Y, pe.Z);
-            monoBehaviour.transform.position = position;
+            player.transform.position = position;
         }
     }
 }
