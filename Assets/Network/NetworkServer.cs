@@ -35,7 +35,8 @@ namespace Network
         {
             while (listening)
             {
-                IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any, port);
+                int port = ((IPEndPoint)udpClient.Client.LocalEndPoint).Port;
+                IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any,port);
                 try
                 {
                     byte[] received = udpClient.Receive(ref remoteIpEndPoint);

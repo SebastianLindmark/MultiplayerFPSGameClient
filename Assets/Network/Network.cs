@@ -14,7 +14,7 @@ namespace Network
         
         public Network(PacketListener packetListener)
         {
-            UdpClient udpClient = new UdpClient(50501);
+            UdpClient udpClient = new UdpClient(0);
             networkClient = new NetworkClient(udpClient, "127.0.0.1", 59090);
             networkServer = new NetworkServer(udpClient, 50501, packetListener);
         }
@@ -22,7 +22,7 @@ namespace Network
 
         public void Start()
         {
-           
+           Connect();
         }
 
         private void Connect()
