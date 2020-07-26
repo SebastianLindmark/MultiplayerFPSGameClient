@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerPingText : MonoBehaviour
 {
-    // Start is called before the first frame update
 
     public GameObject playerOne;
     public GameObject playerTwo;

@@ -7,7 +7,7 @@ namespace Events
 {
     public class JoinEvent : GameEvent
     {
-        private PlayerIdentifier playerIdentifier;
+        private readonly PlayerIdentifier playerIdentifier;
         private readonly string username;
         private readonly byte modeByte = 0;
 
