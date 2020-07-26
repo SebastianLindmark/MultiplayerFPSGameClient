@@ -6,19 +6,18 @@ namespace Events.Parsers
 {
     public class PlayerIdentifierParser
     {
-        private readonly PlayerIdentifier playerIdentifier;
 
-        public PlayerIdentifierParser(PlayerIdentifier playerIdentifier)
+        public PlayerIdentifierParser()
         {
-            this.playerIdentifier = playerIdentifier;
+
         }
 
-        public byte[] Serialize()
+        public PlayerIdentifier Parse(byte[] payload)
         {
-            var destination = new byte[5];
-            Util.CopyBytes(destination, new byte[]{0},BitConverter.GetBytes(playerIdentifier.Id));
-            return destination;
+            int playerId = BitConverter.ToInt32(payload, 0);
+            return new PlayerIdentifier(playerId);
         }
+
 
     }
 }

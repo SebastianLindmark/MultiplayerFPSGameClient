@@ -9,18 +9,17 @@ namespace Game
     public class EntityManager : MonoBehaviour
     {
         private readonly Dictionary<int, Player> entityMap = new Dictionary<int, Player>();
-    
         public NetworkPacketManager networkPacketManager;
     
         public void Add(PlayerIdentifier playerIdentifier, Player player)
         {
-            if (!Exists(playerIdentifier))
-            {
-                entityMap[playerIdentifier.Id] = player;
-                var joinEvent = new JoinEvent(playerIdentifier, player.username);
-                Debug.Log("Sending join event for player " + player.username);
-                networkPacketManager.Send(joinEvent);
-            }
+            if (Exists(playerIdentifier)) return;
+            
+            entityMap[playerIdentifier.Id] = player;
+            var joinEvent = new JoinEvent(playerIdentifier, player.username);
+            
+            Debug.Log("Sending join event for player " + player.username);
+            networkPacketManager.Send(joinEvent);
 
         }
     

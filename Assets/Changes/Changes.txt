@@ -1,0 +1,4 @@
+﻿2020-07-26
+
+Noticed we need a way to address packets to certain players. I therefore included a playerId in start of every request on server side.
+Implemented this extraction at client side but seems to crash. 

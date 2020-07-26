@@ -84,7 +84,7 @@ namespace Network
                 EventHandler eventHandler = ParserFactory.Parse(packet);
                 //Maybe have an "entityManager" instead where all object has a method called handlePacket().
                 //We will need to pass packets to other than players.
-
+                
 
                 if (entityManager.Exists(eventHandler.GetPlayerIdentifier()))
                 {

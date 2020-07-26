@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using dto;
+using Events.Parsers;
 using UnityEngine;
 
 namespace Network
@@ -57,21 +59,31 @@ namespace Network
 
         private void SplitPackets(byte[] payload)
         {
+            
             int payloadSize = payload.Length;
-
             int index = 0;
+            
+            PlayerIdentifier destination = new PlayerIdentifierParser().Parse(payload);
+            index = sizeof(int);
+            
             while (index < payloadSize)
             {
-                int packetSize = BitConverter.ToInt32(payload, 0);
-                index += 4; // move down
-                NotifyPacket(packetSize, index, payload);
+                
+                int packetSize = BitConverter.ToInt32(payload, index);
+                index += sizeof(int);
+                
+                Packet packet = ConstructPacket(packetSize, index, payload);
+                NotifyPacket(packet,destination);                
+                
                 index += packetSize;
             }
         }
 
-        private void NotifyPacket(int packetSize, int payloadOffset, byte[] payload)
+        
+        
+        
+        private void NotifyPacket(Packet packet, PlayerIdentifier destination)
         {
-            Packet packet = ConstructPacket(packetSize, payloadOffset, payload);
             packetListener.onReceive(packet);
         }
 

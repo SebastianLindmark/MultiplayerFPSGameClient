@@ -17,7 +17,6 @@ namespace Events.Parsers
             {
                 PositionEvent pe = PositionParser.Parse(packet.Payload, 1);
                 return new PositionEventHandler(pe);
-                
             }
             
             Debug.LogError("Packet type not recognized " + type);
