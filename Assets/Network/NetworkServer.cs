@@ -8,18 +8,18 @@ namespace Network
 {
     public class NetworkServer
     {
-        private readonly UdpClient udpClient;
-        private readonly int port;
+        private UdpClient udpClient;
+        private IPEndPoint ipEndPoint;
         private readonly PacketListener packetListener;
 
         private bool listening = true;
         private readonly Thread receiveThread;
 
         //"127.0.0.1" 59090
-        public NetworkServer(UdpClient udpClient, int port, PacketListener packetListener)
+        public NetworkServer(UdpClient udpClient, IPEndPoint ipEndPoint, PacketListener packetListener)
         {
             this.udpClient = udpClient;
-            this.port = port;
+            this.ipEndPoint = ipEndPoint;
             this.packetListener = packetListener;
             this.receiveThread = new Thread(Receive);
         }
@@ -35,25 +35,21 @@ namespace Network
         {
             while (listening)
             {
-                int port = ((IPEndPoint)udpClient.Client.LocalEndPoint).Port;
-                IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any,port);
                 try
                 {
-                    byte[] received = udpClient.Receive(ref remoteIpEndPoint);
+                    Debug.Log("Listening for packets");
+                    byte[] received = udpClient.Receive(ref ipEndPoint);
                     SplitPackets(received);
+
                 }
                 catch (SocketException e)
                 {
                     if (e.ErrorCode == 10054)
                     {
                         Debug.Log("Remote port closed, retrying...");
-                        Thread.Sleep(1000);
+                    }
 
-                    }
-                    else
-                    {
-                        Debug.LogError(e);
-                    }
+                    throw e;
                 }
             }
         }

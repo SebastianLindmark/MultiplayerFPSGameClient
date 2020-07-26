@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
         if (!Exists(playerIdentifier))
         {
             playerMap[playerIdentifier.Id] = player;
-            var joinEvent = new JoinEvent(playerIdentifier);
+            var joinEvent = new JoinEvent(playerIdentifier, player.username);
             networkPacketManager.Send(joinEvent);
         }
 

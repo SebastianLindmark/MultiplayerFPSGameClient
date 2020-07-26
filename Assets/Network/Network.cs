@@ -1,4 +1,6 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net;
+using System.Net.Sockets;
 using dto;
 using Events.Parsers;
 using UnityEngine;
@@ -9,32 +11,44 @@ namespace Network
     {
         private readonly NetworkServer networkServer;
         private readonly NetworkClient networkClient;
-
+        private readonly UdpClient udpClient;
         private bool connected = false;
+
+        private IPEndPoint remoteIpEndPoint;
+        
+        private string SERVER_IP = "127.0.0.1";
+        private int SERVER_PORT = 59090;
+
+        private int RECEIVE_PORT = 50501;
         
         public Network(PacketListener packetListener)
         {
-            UdpClient udpClient = new UdpClient(0);
-            networkClient = new NetworkClient(udpClient, "127.0.0.1", 59090);
-            networkServer = new NetworkServer(udpClient, 50501, packetListener);
+            remoteIpEndPoint = new IPEndPoint(IPAddress.Parse(SERVER_IP), SERVER_PORT); // endpoint where server is listening
+            
+            udpClient = new UdpClient();
+            networkClient = new NetworkClient(udpClient);
+            networkServer = new NetworkServer(udpClient, remoteIpEndPoint, packetListener); 
+            udpClient.Connect(remoteIpEndPoint);
         }
-
-
-        public void Start()
+        
+        public bool Connect()
         {
-           Connect();
-        }
-
-        private void Connect()
-        {
-            connected = networkClient.Connect();
-            networkServer.StartReceive();
-            if (!connected)
+            try
             {
-                
+                networkServer.StartReceive();
+                return true;
             }
-        }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return false;
+            }
 
+        }
+        
+
+
+       
         public void Send(Packet packet)
         {
             networkClient.Send(packet);

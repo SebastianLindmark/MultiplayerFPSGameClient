@@ -11,59 +11,77 @@ using EventHandler = Events.Handlers.EventHandler;
 
 public class NetworkPacketManager : MonoBehaviour, PacketListener
 {
-
     private Network.Network network;
 
     public PlayerManager playerManager;
-    
+
+    public bool connected = false;
+
+
     public void Start()
     {
         network = new Network.Network(this);
-        network.Start();
-        
+        TryConnect();
+
         //network.InitiateClient(framedPlayerAttribute.GetPlayerIdentifier());
-        
+
         //The error is because we are not including the type of the action in the game action serializations.
         //Also, WelcomePacket should be a GameEvent -> Serialize -> Packet instead.
         //Also, should network manager really have a reference to framedPlayerAttribute? Feels like network manager
         //is more general and should instead by used by framedPlayerAttribute. Thanks
-        
     }
-    
+
+    public void TryConnect()
+    {
+        if (network.Connect())
+        {
+            Debug.Log("Connected");
+            connected = true;
+        }
+        else
+        {
+            Debug.LogWarning("Trying to connect remote server...");
+            Invoke(nameof(TryConnect), 1000);
+        }
+    }
+
 
     public void Send(GameEvent gameEvent)
     {
-        var gamePacket = new Packet(gameEvent.Serialize());
-        network.Send(gamePacket);
+        if (connected)
+        {
+            var gamePacket = new Packet(gameEvent.Serialize());
+            network.Send(gamePacket);
+        }
     }
-    
-    
-    
-    
+
+
     //This class is quite simple at the moment. But we will use this class to direct packets to the correct player/AI handler. 
 
 
     public void onReceive(Packet packet)
     {
-        Debug.Log("Received packet");
-        EventHandler eventHandler =  ParserFactory.Parse(packet);
-        
-        //Maybe have an "entityManager" instead where all object has a method called handlePacket().
-        //We will need to pass packets to other than players.
-        
-        
-        
-        if (playerManager.Exists(eventHandler.GetPlayerIdentifier()))
+        try
         {
-            Player player = playerManager.GetPlayer(new PlayerIdentifier(666));
-            player.OnAction(eventHandler);    
+            Debug.Log("Received packet");
+            EventHandler eventHandler = ParserFactory.Parse(packet);
+            //Maybe have an "entityManager" instead where all object has a method called handlePacket().
+            //We will need to pass packets to other than players.
+
+
+            if (playerManager.Exists(eventHandler.GetPlayerIdentifier()))
+            {
+                Player player = playerManager.GetPlayer(new PlayerIdentifier(666));
+                player.OnAction(eventHandler);
+            }
+            else
+            {
+                Debug.Log("Player " + eventHandler.GetPlayerIdentifier().Id + " does not exist");
+            }
         }
-        else
+        catch (Exception e)
         {
-            Debug.Log("Player " + eventHandler.GetPlayerIdentifier().Id + " does not exist" );
+            Debug.LogError(e);
         }
-
-
-
     }
 }

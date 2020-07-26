@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, NetworkEntity
 {
     
     public int playerId;
+    public string username;
 
     private PlayerIdentifier playerIdentifier;
     

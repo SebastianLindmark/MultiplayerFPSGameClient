@@ -1,50 +1,30 @@
-﻿    using System;
-    using System.Net.Sockets;
-    using UnityEngine;
+﻿using System;
+using System.Net.Sockets;
+using UnityEngine;
 
-    namespace Network
+namespace Network
+{
+    public class NetworkClient
     {
-        public class NetworkClient
+        private readonly UdpClient udpClient;
+
+        public NetworkClient(UdpClient udpClient)
         {
-        
-            private readonly UdpClient udpClient;
-            private readonly string ip;
-            private readonly int port;
-        
-            //"127.0.0.1" 59090
-            public NetworkClient(UdpClient udpClient, string ip, int port)
-            {
-                this.udpClient = udpClient;
-                this.ip = ip;
-                this.port = port;
-            }
+            this.udpClient = udpClient;
+        }
 
-            public bool Connect()
-            {
-                try
-                {
-                    udpClient.Connect(ip, port);
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                    return false;
-                }
-
-            }
-
-            public void Send(Packet packet)
+        public void Send(Packet packet)
+        {
+            if (udpClient.Client != null)
             {
                 packet.AppendPacketSizeHeader();
                 udpClient.Send(packet.getPayload(), packet.getPayload().Length);
             }
+        }
 
-            public void Disconnect()
-            {
-                udpClient.Close();
-            }
-
-
+        public void Disconnect()
+        {
+            udpClient.Close();
         }
     }
+}
