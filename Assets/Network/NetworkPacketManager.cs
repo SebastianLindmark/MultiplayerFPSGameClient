@@ -21,7 +21,7 @@ namespace Network
 
         public void Start()
         {
-            network = new global::Network.Network(this);
+            network = new Network(this);
             TryConnect();
 
             //network.InitiateClient(framedPlayerAttribute.GetPlayerIdentifier());
@@ -76,30 +76,26 @@ namespace Network
         //This class is quite simple at the moment. But we will use this class to direct packets to the correct player/AI handler. 
 
 
-        public void onReceive(Packet packet)
+        public void onReceive(Packet packet, PlayerIdentifier playerIdentifier)
         {
-            try
-            {
-                Debug.Log("Received packet");
-                EventHandler eventHandler = ParserFactory.Parse(packet);
+            
+                Debug.Log("Received packet for player " + playerIdentifier.Id);
+                EventHandler eventHandler = EventHandlerFactory.Parse(packet);
                 //Maybe have an "entityManager" instead where all object has a method called handlePacket().
                 //We will need to pass packets to other than players.
                 
-
-                if (entityManager.Exists(eventHandler.GetPlayerIdentifier()))
+                
+                if (entityManager.Exists(playerIdentifier))
                 {
-                    Player player = entityManager.GetEntity(new PlayerIdentifier(666));
+                    Player player = entityManager.GetEntity(playerIdentifier);
                     player.OnAction(eventHandler);
                 }
                 else
                 {
                     Debug.Log("Player " + eventHandler.GetPlayerIdentifier().Id + " does not exist");
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
+            
+            
         }
     }
 }

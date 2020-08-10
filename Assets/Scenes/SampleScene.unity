@@ -804,7 +804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 954a758985bd4cbfa182dd95c80c1af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerManager: {fileID: 245226832}
+  entityManager: {fileID: 245226832}
   connected: 0
 --- !u!1 &1767660128
 GameObject:

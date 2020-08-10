@@ -6,7 +6,7 @@ using EventHandler = Events.Handlers.EventHandler;
 
 namespace Events.Parsers
 {
-    public class ParserFactory
+    public class EventHandlerFactory
     {
 
         public static EventHandler Parse(Packet packet)

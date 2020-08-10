@@ -84,7 +84,7 @@ namespace Network
         
         private void NotifyPacket(Packet packet, PlayerIdentifier destination)
         {
-            packetListener.onReceive(packet);
+            packetListener.onReceive(packet,destination);
         }
 
         private Packet ConstructPacket(int packetSize, int payloadOffset, byte[] payload)

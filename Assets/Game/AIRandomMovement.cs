@@ -20,7 +20,6 @@ namespace Game
             float x = 0;
             float z = 0;
 
-            Debug.Log(Time.time);
             if (Time.time - movementTimer > 10)
             {
                 movementTimer = Time.time;
