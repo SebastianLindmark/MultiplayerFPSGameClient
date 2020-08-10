@@ -4,6 +4,8 @@ using dto;
 using Events;
 using Events.Parsers;
 using Game;
+using Game.Entity;
+using Game.GameEntity;
 using UnityEngine;
 using EventHandler = Events.Handlers.EventHandler;
 
@@ -87,8 +89,8 @@ namespace Network
                 
                 if (entityManager.Exists(playerIdentifier))
                 {
-                    Player player = entityManager.GetEntity(playerIdentifier);
-                    player.OnAction(eventHandler);
+                    Entity entity = entityManager.GetEntity(playerIdentifier);
+                    entity.OnAction(eventHandler);
                 }
                 else
                 {

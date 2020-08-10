@@ -1,6 +1,8 @@
 ﻿using System;
 using Events.Handlers;
 using Network;
+using Network.Events.Handlers;
+using Network.Events.Parsers;
 using UnityEngine;
 using EventHandler = Events.Handlers.EventHandler;
 

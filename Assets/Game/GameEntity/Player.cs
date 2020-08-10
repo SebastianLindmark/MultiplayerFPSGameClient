@@ -3,17 +3,16 @@ using dto;
 using Events.Handlers;
 using UnityEngine;
 
-namespace Game
+namespace Game.GameEntity
 {
-    public class Player : MonoBehaviour, NetworkEntity
+    public class Player : Entity
     {
     
+        protected readonly ConcurrentQueue<EventHandler> eventHandlerQueue = new ConcurrentQueue<EventHandler>();
+        
         public int playerId;
         public string username;
-
-        private PlayerIdentifier playerIdentifier;
-        
-        private readonly ConcurrentQueue<EventHandler> eventHandlerQueue = new ConcurrentQueue<EventHandler>();
+       
 
         void Start()
         {
@@ -29,34 +28,23 @@ namespace Game
         
         }
 
-
-        public void OnAction(EventHandler eventHandler)
+        public override string Name()
         {
-            eventHandlerQueue.Enqueue(eventHandler);
+            return username;
         }
-
-        public PlayerIdentifier GetPlayerIdentifier()
-        {
-            return playerIdentifier;
-        }
-    
+        
         void Update()
         {
             if (eventHandlerQueue.TryDequeue(out var eventHandler))
             {
-                Debug.Log("Parsing message");
                 eventHandler.Execute(this);
             }
         }
 
-        public PlayerIdentifier getId()
+        public override void OnAction(EventHandler eventHandler)
         {
-            return playerIdentifier;
+            eventHandlerQueue.Enqueue(eventHandler);
         }
-
-        public void onEventReceive(EventHandler eventHandler)
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }

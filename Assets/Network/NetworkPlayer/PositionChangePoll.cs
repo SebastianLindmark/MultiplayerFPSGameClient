@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using dto;
+using Network.NetworkPlayer;
 using UnityEngine;
 
 namespace NetworkPlayer

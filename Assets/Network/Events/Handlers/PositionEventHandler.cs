@@ -1,9 +1,10 @@
 ﻿using dto;
-using Game;
-using UnityEditor;
+using Events;
+using Events.Handlers;
+using Game.GameEntity;
 using UnityEngine;
 
-namespace Events.Handlers
+namespace Network.Events.Handlers
 {
     public class PositionEventHandler : EventHandler
     {
@@ -25,6 +26,8 @@ namespace Events.Handlers
 
         public void Execute(Player player)
         {
+            Debug.Log("Received position update for entity id " + positionEvent.PlayerIdentifier.Id);
+            Debug.Log("I am id " + player.playerIdentifier.Id);
             
             var pe = positionEvent.Position;
             Vector3 position = new Vector3(pe.X,pe.Y, pe.Z);

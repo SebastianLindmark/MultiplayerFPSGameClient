@@ -4,21 +4,21 @@ using Events;
 using Network;
 using UnityEngine;
 
-namespace Game
+namespace Game.GameEntity
 {
     public class EntityManager : MonoBehaviour
     {
-        private readonly Dictionary<int, Player> entityMap = new Dictionary<int, Player>();
+        private readonly Dictionary<int, Entity> entityMap = new Dictionary<int, Entity>();
         public NetworkPacketManager networkPacketManager;
     
-        public void Add(PlayerIdentifier playerIdentifier, Player player)
+        public void Add(PlayerIdentifier playerIdentifier, Entity entity)
         {
             if (Exists(playerIdentifier)) return;
             
-            entityMap[playerIdentifier.Id] = player;
-            var joinEvent = new JoinEvent(playerIdentifier, player.username);
+            entityMap[playerIdentifier.Id] = entity;
+            var joinEvent = new JoinEvent(playerIdentifier, entity.Name());
             
-            Debug.Log("Sending join event for player " + player.username);
+            Debug.Log("Sending join event for entity " + entity.Name());
             networkPacketManager.Send(joinEvent);
 
         }
@@ -28,7 +28,7 @@ namespace Game
             return entityMap.ContainsKey(playerIdentifier.Id);
         }
 
-        public Player GetEntity(PlayerIdentifier playerIdentifier)
+        public Entity GetEntity(PlayerIdentifier playerIdentifier)
         {
             if (Exists(playerIdentifier))
             {

@@ -1,43 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using dto;
+using Game.Entity;
+using Game.GameEntity;
 using UnityEngine;
 
-public class NetworkEntityManager : MonoBehaviour
+namespace Network
 {
-    private readonly Dictionary<int, NetworkEntity> playerMap = new Dictionary<int, NetworkEntity>();
-
-    private void Start()
+    public class NetworkEntityManager : MonoBehaviour
     {
-        var networkEntities = FindObjectsOfType<MonoBehaviour>().OfType<NetworkEntity>();
-        foreach (var entity in networkEntities)
-        {   
-            Debug.Log("Adding entity with id " + entity.getId());
-            Add(entity.getId(), entity);
-        }
-    }
+        private readonly Dictionary<int, Entity> playerMap = new Dictionary<int, Entity>();
 
-    public void Add(PlayerIdentifier playerIdentifier, NetworkEntity player)
-    {
-        if (!Exists(playerIdentifier))
+        private void Start()
         {
-            playerMap[playerIdentifier.Id] = player;
+            var networkEntities = FindObjectsOfType<MonoBehaviour>().OfType<Entity>();
+            foreach (var entity in networkEntities)
+            {   
+                Debug.Log("Adding entity with id " + entity.playerIdentifier.Id);
+                Add(entity.playerIdentifier, entity);
+            }
         }
-    }
 
-    public bool Exists(PlayerIdentifier playerIdentifier)
-    {
-        return playerMap.ContainsKey(playerIdentifier.Id);
-    }
-
-    public NetworkEntity GetPlayer(PlayerIdentifier playerIdentifier)
-    {
-        if (Exists(playerIdentifier))
+        public void Add(PlayerIdentifier playerIdentifier, Entity player)
         {
-            return playerMap[playerIdentifier.Id];
+            if (!Exists(playerIdentifier))
+            {
+                playerMap[playerIdentifier.Id] = player;
+            }
         }
 
-        throw new PlayerNotFoundException(playerIdentifier.Id);
+        public bool Exists(PlayerIdentifier playerIdentifier)
+        {
+            return playerMap.ContainsKey(playerIdentifier.Id);
+        }
+
+        public Entity GetEntity(PlayerIdentifier playerIdentifier)
+        {
+            if (Exists(playerIdentifier))
+            {
+                return playerMap[playerIdentifier.Id];
+            }
+
+            throw new PlayerNotFoundException(playerIdentifier.Id);
+        }
     }
 }

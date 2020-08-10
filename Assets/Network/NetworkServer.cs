@@ -39,7 +39,6 @@ namespace Network
             {
                 try
                 {
-                    Debug.Log("Listening for packets");
                     byte[] received = udpClient.Receive(ref ipEndPoint);
                     SplitPackets(received);
 

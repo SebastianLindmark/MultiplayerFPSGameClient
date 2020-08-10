@@ -1,9 +1,10 @@
 ﻿using System;
 using dto;
+using Events;
 
-namespace Events.Parsers
+namespace Network.Events.Parsers
 {
-    public class PositionParser
+    public static class PositionParser
     {
         public static PositionEvent Parse(byte[] packetData, int startIndex)
         {

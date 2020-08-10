@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using dto;
 using Events;
-using Game;
-using Network;
+using Game.GameEntity;
+using NetworkPlayer;
 using UnityEngine;
 
-namespace NetworkPlayer
+namespace Network.NetworkPlayer
 {
     public class PlayerNetworkController : MonoBehaviour
     {
@@ -30,7 +28,7 @@ namespace NetworkPlayer
 
         private void SendPlayerUpdates()
         {
-            List<GameEvent> events = CollectAttributes(player.GetPlayerIdentifier());
+            List<GameEvent> events = CollectAttributes(player.playerIdentifier);
             events.ForEach(e => networkPacketManager.Send(e));
             playerAttribute = new PlayerAttribute();
             

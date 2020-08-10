@@ -1,5 +1,7 @@
 ﻿using dto;
 using Game;
+using Game.Entity;
+using Game.GameEntity;
 using UnityEngine;
 
 namespace Events.Handlers
