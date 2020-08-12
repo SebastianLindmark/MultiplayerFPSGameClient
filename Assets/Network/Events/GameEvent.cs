@@ -1,4 +1,4 @@
-﻿namespace Events
+﻿namespace Network.Events
 {
     public interface GameEvent
     {

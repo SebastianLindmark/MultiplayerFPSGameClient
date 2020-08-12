@@ -62,9 +62,6 @@ namespace Network
             int payloadSize = payload.Length;
             int index = 0;
             
-            PlayerIdentifier destination = new PlayerIdentifierParser().Parse(payload);
-            index = sizeof(int);
-            
             while (index < payloadSize)
             {
                 
@@ -72,7 +69,7 @@ namespace Network
                 index += sizeof(int);
                 
                 Packet packet = ConstructPacket(packetSize, index, payload);
-                NotifyPacket(packet,destination);                
+                NotifyPacket(packet);                
                 
                 index += packetSize;
             }
@@ -81,9 +78,9 @@ namespace Network
         
         
         
-        private void NotifyPacket(Packet packet, PlayerIdentifier destination)
+        private void NotifyPacket(Packet packet)
         {
-            packetListener.onReceive(packet,destination);
+            packetListener.onReceive(packet);
         }
 
         private Packet ConstructPacket(int packetSize, int payloadOffset, byte[] payload)

@@ -1,4 +1,5 @@
 ﻿using Events;
+using Network.Events;
 
 namespace NetworkPlayer
 {

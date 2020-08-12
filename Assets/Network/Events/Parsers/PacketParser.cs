@@ -1,4 +1,6 @@
-﻿namespace Events.Parsers
+﻿using Network.Events;
+
+namespace Events.Parsers
 {
     public interface PacketParser
     {

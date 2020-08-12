@@ -4,6 +4,6 @@
     {
         public interface PacketListener
         {
-            void onReceive(Packet packet,PlayerIdentifier playerIdentifier);
+            void onReceive(Packet packet);
         }
     }

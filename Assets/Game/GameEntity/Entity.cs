@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using dto;
 using UnityEngine;
-using EventHandler = Events.Handlers.EventHandler;
+using EventHandler = Network.Events.Handlers.EventHandler;
 using Random = UnityEngine.Random;
 
 namespace Game.GameEntity

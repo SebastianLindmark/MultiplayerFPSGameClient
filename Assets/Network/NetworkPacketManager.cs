@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using dto;
 using Events;
 using Events.Parsers;
-using Game;
-using Game.Entity;
 using Game.GameEntity;
+using Network.Events;
 using UnityEngine;
-using EventHandler = Events.Handlers.EventHandler;
+using EventHandler = Network.Events.Handlers.EventHandler;
 
 namespace Network
 {
@@ -26,12 +25,6 @@ namespace Network
             network = new Network(this);
             TryConnect();
 
-            //network.InitiateClient(framedPlayerAttribute.GetPlayerIdentifier());
-
-            //The error is because we are not including the type of the action in the game action serializations.
-            //Also, WelcomePacket should be a GameEvent -> Serialize -> Packet instead.
-            //Also, should network manager really have a reference to framedPlayerAttribute? Feels like network manager
-            //is more general and should instead by used by framedPlayerAttribute. Thanks
         }
 
         public void TryConnect()
@@ -74,23 +67,16 @@ namespace Network
             }
         }
 
-
-        //This class is quite simple at the moment. But we will use this class to direct packets to the correct player/AI handler. 
-
-
-        public void onReceive(Packet packet, PlayerIdentifier playerIdentifier)
+        public void onReceive(Packet packet)
         {
             
-                Debug.Log("Received packet for player " + playerIdentifier.Id);
+//                Debug.Log("Received packet for player " + playerIdentifier.Id);
                 EventHandler eventHandler = EventHandlerFactory.Parse(packet);
-                //Maybe have an "entityManager" instead where all object has a method called handlePacket().
-                //We will need to pass packets to other than players.
-                
-                
-                if (entityManager.Exists(playerIdentifier))
+
+                if (entityManager.Exists(eventHandler.GetPlayerIdentifier()))
                 {
-                    Entity entity = entityManager.GetEntity(playerIdentifier);
-                    entity.OnAction(eventHandler);
+                    Entity entity = entityManager.GetEntity(eventHandler.GetPlayerIdentifier());
+                    //entity.OnAction(eventHandler);
                 }
                 else
                 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using dto;
-using Events.Handlers;
+using Network.Events.Handlers;
 using UnityEngine;
 
 namespace Game.GameEntity
