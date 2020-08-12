@@ -76,7 +76,7 @@ namespace Network
                 if (entityManager.Exists(eventHandler.GetPlayerIdentifier()))
                 {
                     Entity entity = entityManager.GetEntity(eventHandler.GetPlayerIdentifier());
-                    //entity.OnAction(eventHandler);
+                    entity.OnAction(eventHandler);
                 }
                 else
                 {
